@@ -152,6 +152,29 @@ SolarNode.Settings.addTextField = function(params) {
 };
 
 /**
+ * Setup cron fields (text field and select box).
+ *
+ * @param params.provider {String} the provider key
+ * @param params.setting {String} the setting key
+ * @param params.key {String} the DOM element ID for the text field
+ * @param params.value {String} the initial value
+ */
+SolarNode.Settings.addCronField = function(params) {
+	var field = $('#'+params.key);
+	field.change(function() {
+			var value = field.val();
+			console.log(value);
+			SolarNode.Settings.updateSetting(params, value);
+		});
+	var fieldSelect = $('#'+params.key+"_select");
+	fieldSelect.change(function() {
+			var value = fieldSelect.val();
+			field.val(value);
+			SolarNode.Settings.updateSetting(params, value);
+		});
+};
+
+/**
  * Setup a new location finder field.
  * 
  * @param params.provider {String} the provider key
