@@ -161,12 +161,14 @@ SolarNode.Settings.addTextField = function(params) {
  */
 SolarNode.Settings.addCronField = function(params) {
 	var field = $('#'+params.key);
+	var fieldSelect = $('#'+params.key+"_select");
 	field.change(function() {
 			var value = field.val();
-			console.log(value);
 			SolarNode.Settings.updateSetting(params, value);
+			// Clears select field if custom value given, sets back to disabled option
+			fieldSelect.find('option:disabled:first').prop('selected', true);
+			
 		});
-	var fieldSelect = $('#'+params.key+"_select");
 	fieldSelect.change(function() {
 			var value = fieldSelect.val();
 			field.val(value);
