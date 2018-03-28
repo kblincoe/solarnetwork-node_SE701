@@ -162,11 +162,13 @@ SolarNode.Settings.addTextField = function(params) {
 SolarNode.Settings.addCronField = function(params) {
 	var field = $('#'+params.key);
 	var fieldSelect = $('#'+params.key+"_select");
+	var currentValue = field.val();
+	// Check when page initially loads
+	SolarNode.Settings.checkCronMatch(currentValue, params.key, fieldSelect);
 	field.change(function() {
 			var value = field.val();
 			SolarNode.Settings.updateSetting(params, value);
-			// Clears select field if custom value given, sets back to disabled option
-			fieldSelect.find('option:disabled:first').prop('selected', true);
+			SolarNode.Settings.checkCronMatch(value, params.key, fieldSelect);
 			
 		});
 	fieldSelect.change(function() {
@@ -175,6 +177,18 @@ SolarNode.Settings.addCronField = function(params) {
 			SolarNode.Settings.updateSetting(params, value);
 		});
 };
+
+/**
+ * Helper method to check if the text input's cron expression matches any of the select options.
+ * If it does, it selects the option. If it does not, sets back to default option.
+ */
+SolarNode.Settings.checkCronMatch = function(value, key, fieldSelect) {
+	if ($('#'+key+'_select option[value="'+value+'"]').length > 0) {
+		fieldSelect.val(value);
+	} else {
+		fieldSelect.find('option:disabled:first').prop('selected', true);
+	}
+}
 
 /**
  * Setup a new location finder field.
