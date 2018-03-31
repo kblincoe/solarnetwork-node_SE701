@@ -175,6 +175,7 @@ SolarNode.Settings.addCronField = function(params) {
 			var value = fieldSelect.val();
 			field.val(value);
 			SolarNode.Settings.updateSetting(params, value);
+			SolarNode.Settings.checkCronMatch(value, params.key, fieldSelect);
 		});
 };
 
@@ -183,9 +184,13 @@ SolarNode.Settings.addCronField = function(params) {
  * If it does, it selects the option. If it does not, sets back to default option.
  */
 SolarNode.Settings.checkCronMatch = function(value, key, fieldSelect) {
-	if ($('#'+key+'_select option[value="'+value+'"]').length > 0) {
+	if (value != "" & $('#'+key+'_select option[value="'+value+'"]').length > 0) {
 		fieldSelect.val(value);
+		$('#'+key+'_select').attr('class', 'span5');
+		$('#'+key).hide();
 	} else {
+		$('#'+key).show();
+		$('#'+key+'_select').attr('class', 'span3');
 		fieldSelect.find('option:disabled:first').prop('selected', true);
 	}
 }
