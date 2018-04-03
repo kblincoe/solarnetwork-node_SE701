@@ -152,6 +152,50 @@ SolarNode.Settings.addTextField = function(params) {
 };
 
 /**
+ * Setup cron fields (text field and select box).
+ *
+ * @param params.provider {String} the provider key
+ * @param params.setting {String} the setting key
+ * @param params.key {String} the DOM element ID for the text field
+ * @param params.value {String} the initial value
+ */
+SolarNode.Settings.addCronField = function(params) {
+	var field = $('#'+params.key);
+	var fieldSelect = $('#'+params.key+"_select");
+	var currentValue = field.val();
+	// Check when page initially loads
+	SolarNode.Settings.checkCronMatch(currentValue, params.key, fieldSelect);
+	field.change(function() {
+			var value = field.val();
+			SolarNode.Settings.updateSetting(params, value);
+			SolarNode.Settings.checkCronMatch(value, params.key, fieldSelect);
+			
+		});
+	fieldSelect.change(function() {
+			var value = fieldSelect.val();
+			field.val(value);
+			SolarNode.Settings.updateSetting(params, value);
+			SolarNode.Settings.checkCronMatch(value, params.key, fieldSelect);
+		});
+};
+
+/**
+ * Helper method to check if the text input's cron expression matches any of the select options.
+ * If it does, it selects the option. If it does not, sets back to default option.
+ */
+SolarNode.Settings.checkCronMatch = function(value, key, fieldSelect) {
+	if (value != "" & $('#'+key+'_select option[value="'+value+'"]').length > 0) {
+		fieldSelect.val(value);
+		$('#'+key+'_select').attr('class', 'span5');
+		$('#'+key).hide();
+	} else {
+		$('#'+key).show();
+		$('#'+key+'_select').attr('class', 'span3');
+		fieldSelect.find('option:disabled:first').prop('selected', true);
+	}
+}
+
+/**
  * Setup a new location finder field.
  * 
  * @param params.provider {String} the provider key

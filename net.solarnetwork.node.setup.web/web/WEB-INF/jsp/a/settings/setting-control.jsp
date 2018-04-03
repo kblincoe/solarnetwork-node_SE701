@@ -136,6 +136,27 @@
 						});
 						</script>
 					</c:when>
+					<c:when test="${setup:instanceOf(setting, 'net.solarnetwork.node.settings.CronExpressionSettingSpecifier')}">
+						<select name="${settingId}_select" id="${settingId}_select" >
+							<option value="" selected>Custom Schedule</option>
+							<option value="* * * * * ?">Every Minute</option>
+							<option value="0 0 * * * ?">Every Day (Midnight)</option>
+							<option value="0 0 1 * * ?">Every month (on the 1st)</option>
+						</select>
+						<input type="${setting.secureTextEntry == true ? 'password' : 'text' }" name="${settingId}" id="${settingId}"
+							class="span2" maxLength="255" value="${settingValue}"/>
+						<script>
+						$(function() {
+							SolarNode.Settings.addCronField({
+								key: '${settingId}',
+								xint: '${setting["transient"]}',
+								provider: '${provider.settingUID}',
+								setting: '${setup:js(setting.key)}',
+								instance: '${instanceId}'
+							});
+						});
+						</script>
+					</c:when>
 					<c:when test="${setup:instanceOf(setting, 'net.solarnetwork.node.settings.TextFieldSettingSpecifier')}">
 						<input type="${setting.secureTextEntry == true ? 'password' : 'text' }" name="${settingId}" id="${settingId}" 
 							class="span5" maxLength="255"
